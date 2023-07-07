@@ -1,6 +1,8 @@
+const { MongoClient } = require('mongodb');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const client = new MongoClient(uri);
 
 mongoose.set("strictQuery", true);
 const app = express();
@@ -117,7 +119,22 @@ app.post("/", function (req, res) {
 		});
 	}
 });
+app.get("/items/:my_item", async (req, res) => {
+    let my_item = req.params.my_item;
+    let item = await client.db("my_db")
+                .collection("my_collection")
+                .findOne({my_item: my_item})
 
+    return res.json(item)
+})
+
+client.connect(err => {
+    if(err){ console.error(err); return false;}
+    // connection to mongo is successful, listen for requests
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+});
 app.post("/delete", function (req, res) {
 	const checkedItemId = req.body.checkbox;
 	Item.findByIdAndRemove(checkedItemId, function (err) {
