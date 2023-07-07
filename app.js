@@ -131,11 +131,6 @@ app.post("/delete", function (req, res) {
 app.get("/about", function (req, res) {
 	res.render("about");
 });
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log("listening for requests");
-    })
-})
 
 
 
