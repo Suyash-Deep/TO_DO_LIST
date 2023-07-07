@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const app = express();
 const port = process.env.PORT || 3000;
-const client = new MongoClient(uri);
 require("dotenv").config();
 
 app.set("view engine", "ejs");
@@ -132,13 +131,11 @@ app.post("/delete", function (req, res) {
 app.get("/about", function (req, res) {
 	res.render("about");
 });
-client.connect(err => {
-    if(err){ console.error(err); return false;}
-    // connection to mongo is successful, listen for requests
+connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("listening for requests");
     })
-});
+})
 
 
 
